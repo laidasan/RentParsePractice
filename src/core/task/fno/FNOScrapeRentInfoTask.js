@@ -1,10 +1,10 @@
-import Task from './Task.js';
+import Task from '../Task.js';
 
 /**
  * @class ScrapeRentInfoTask
  * @extends Task
  */
-export default class ScrapeRentInfoTask extends Task {
+export default class FNOScrapeRentInfoTask extends Task {
     /**
      * @constructor
      * @param {Object} params
@@ -59,8 +59,6 @@ export default class ScrapeRentInfoTask extends Task {
           }
         })(items);
       });
-  
-      console.log(result);
   
       return result;
     
