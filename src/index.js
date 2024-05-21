@@ -1,4 +1,7 @@
 import puppeteer from 'puppeteer';
+import { pipe, map } from 'ramda'
+
+import { parseFNORentScrapedInfo, toFNORentInfo } from './core/adapter/fno.js'
 
 import Scraper from './core/scrape/Scraper.js';
 import FNOTaskRentsFactory from './core/factory/FNOTaskRentsFactory.js';
@@ -34,6 +37,13 @@ try {
   })
 
   console.log(result)
+
+  const rents = pipe(
+    map(parseFNORentScrapedInfo),
+    map(toFNORentInfo)
+  )(result)
+
+  console.log(rents)
   
   await browser.close()
 } catch (error) {
