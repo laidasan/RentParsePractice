@@ -35,7 +35,7 @@ try {
     },
 
     searchOptions: {
-      isScrapeAll: false,
+      isScrapeAll: true,
       startPage: 1,
       endPage: 1,
     }

@@ -4,6 +4,8 @@ import TaskDecorator from './TaskDecorator.js';
 
 import { toPageInformation, toOptions } from '../adapter/options.js'
 
+const LimitTimes = 100
+
 /**
  * @class AbstractScapeToEndDecorator
  * @public
@@ -68,7 +70,7 @@ export default class AbstractScrapeToEndDecorator extends TaskDecorator {
     
     const scrapedResult = await this.task.execute();
 
-    if(isEmpty(scrapedResult) || this._times > 2) {
+    if(isEmpty(scrapedResult) || this._times > LimitTimes) {
       return this._result;
     } else {
       this._result = concat(this._result, scrapedResult);
