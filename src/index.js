@@ -49,8 +49,6 @@ try {
   )(result)
   const workbook = new ExcelJs.Workbook();
 
-  console.log(rents)
-
   // 將工作簿寫入文件
   writeFNOWorksheet({ workbook, rents })
 
