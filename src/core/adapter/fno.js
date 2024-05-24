@@ -41,6 +41,8 @@ export const toFNORentInfo = (scrapedRentInfo) => {
   const { roomFloor, address } = scrapedRentInfo
   const [currentFloor, totalFloor] = split('/')(roomFloor)
   const [district, description] = split('-')(address)
+  const roomSize = defaultTo(0)(parseFloat(scrapedRentInfo.roomSize, 10))
+  const rent = defaultTo(0)(numeral(scrapedRentInfo.rent).value())
 
   return {
     id: scrapedRentInfo.id,
@@ -48,7 +50,7 @@ export const toFNORentInfo = (scrapedRentInfo) => {
     room: {
       kind: scrapedRentInfo.roomKind,
       kindDescription: scrapedRentInfo.roomKindDescription,
-      size: defaultTo(0)(parseFloat(scrapedRentInfo.roomSize, 10)),
+      size: roomSize,
       currentFloor: defaultTo(0)(parseInt(currentFloor, 10)),
       floorDescription: roomFloor
     },
@@ -59,22 +61,9 @@ export const toFNORentInfo = (scrapedRentInfo) => {
       information: scrapedRentInfo.addressDescription
     },
     rent: defaultTo(0)(numeral(scrapedRentInfo.rent).value()),
+    costPerSquareMeters: Math.floor(rent / (roomSize || 1))
   }
 }
-
-// {
-//     id: '16642046',
-//     title: '全新兩房🔥租屋補助⭐台水電⭐24H物管',
-//     roomKind: '整層住家',
-//     roomKindDescription: '2房2廳',
-//     roomSize: '30.2坪',
-//     roomFloor: '4F/12F',
-//     details: '整層住家 2房2廳 30.2坪 4F/12F',
-//     addressDescription: '大耀星光',
-//     address: '大里區-新光路',
-//     rent: '22,499'
-//   }
-
 
 /**
  * @typedef {Object} FNORentScrapedInfo
@@ -98,6 +87,7 @@ export const toFNORentInfo = (scrapedRentInfo) => {
  * @property {number} totalFloor 租屋總層數
  * @property {Address} address 地址
  * @property {number} rent 房租
+ * @property {number} costPerSquareMeters 坪數單價
  */
 
 /**

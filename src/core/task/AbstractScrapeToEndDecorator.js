@@ -11,6 +11,11 @@ import { toPageInformation, toOptions } from '../adapter/options.js'
  * @extends TaskDecorator
  */
 export default class AbstractScrapeToEndDecorator extends TaskDecorator {
+/**
+   * @type {number}
+   */
+  _times = 0
+
   /**
    * @type {PageInformation} 
    */
@@ -37,6 +42,8 @@ export default class AbstractScrapeToEndDecorator extends TaskDecorator {
     super(task); 
     this.pageInformation = toPageInformation(pageInformation);
     this.options = toOptions({ queryParams, searchOptions});
+    this._times = this.options.searchOptions.startPage - 1
+
   }
 
   get pageInformation() {
@@ -57,14 +64,15 @@ export default class AbstractScrapeToEndDecorator extends TaskDecorator {
 
   async execute() {
     this.task.url = this.createTargetUrl();
+    this._times += 1
     
     const scrapedResult = await this.task.execute();
 
-    if(isEmpty(scrapedResult)) {
+    if(isEmpty(scrapedResult) || this._times > 2) {
       return this._result;
     } else {
       this._result = concat(this._result, scrapedResult);
-      testTimes += 1
+      
       return this.execute()
     }
   }

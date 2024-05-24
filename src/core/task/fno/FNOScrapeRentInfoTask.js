@@ -33,10 +33,16 @@ export default class FNOScrapeRentInfoTask extends Task {
     async execute() {
       await this.goToPage();
       await this.loadRamda();
+
+      console.log(`開始爬取租屋資訊，網址：${this.url}`)
+
       const result = await this.page.evaluate(() => {
-        const { length, takeLast, map, propOr } = window.R;
-        const rentInfoContainer = document.querySelector('.vue-list-rent-content');
-        const items = rentInfoContainer.querySelectorAll('.vue-list-rent-item');
+        const { isEmpty, defaultTo, length, takeLast, map, propOr } = window.R;
+        const rentInfoContainer = defaultTo({})(document.querySelector('.vue-list-rent-content'));
+        if(isEmpty(rentInfoContainer)) {
+          console.warn('找不到租屋資訊容器')
+        }
+        const items = isEmpty(rentInfoContainer) ? [] : rentInfoContainer.querySelectorAll('.vue-list-rent-item');
     
         return map(item => {
           const roomDetailsElement = item.querySelectorAll('.item-style li');
